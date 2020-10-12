@@ -83,6 +83,7 @@ classdef CartPendulum < handle
             M           = obj.M;
             l           = obj.l;
             g           = obj.g;
+            d           = obj.d;
             % precompute
             dtheta2     = x_bar(dtind)^2;
             sin_th      = sin( x_bar(tind) );
@@ -96,26 +97,28 @@ classdef CartPendulum < handle
             % compute derivatives
             g0          = 1/tmp_1;
             dg0_dtheta  = -1/(tmp_1^2)*(2*m*mll*cos_th*sin_th);
-            g1          = m*mll*g*cos_th*sin_th + tmp_2*dtheta2;
+            g1          = m*mll*g*cos_th*sin_th + tmp_2*dtheta2 - mll*d*x_bar(dXind);
             dg1_dtheta  = -tmp_3*g + tmp_4*g + m*l*mll*cos_th*dtheta2;
-            g2          = -(m+M)*m*g*l*sin_th - tmp_5*dtheta2;
-            dg2_dtheta  = -(m+M)*m*g*l*cos_th + tmp_3*dtheta2 - tmp_4*dtheta2;
+            g2          = -(m+M)*m*g*l*sin_th - tmp_5*dtheta2 + m*l*cos_th*d*x_bar(dXind) ;
+            dg2_dtheta  = -(m+M)*m*g*l*cos_th + tmp_3*dtheta2 - tmp_4*dtheta2 - m*l*sin_th*d*x_bar(dXind);
             
             
             df3_dtheta  = (g1 + mll*u_bar)*dg0_dtheta + g0*dg1_dtheta;
-            df3_ddtheta = 2*tmp_2/tmp_1*x_bar(dtind);
-            df4_dtheta  = (g2 - m*l*cos_th*u_bar)*dg0_dtheta + (dg2_dtheta + m*l*sin_th)*g0;
-            df4_ddtheta = -2*tmp_5/tmp_1*x_bar(dtind);
+            df3_ddtheta = 2*tmp_2*g0*x_bar(dtind);
+            df3_ddX     = -mll*d*g0;
+            df4_dtheta  = (g2 - m*l*cos_th*u_bar)*dg0_dtheta + (dg2_dtheta + m*l*sin_th*u_bar)*g0;
+            df4_ddtheta = -2*tmp_5*g0*x_bar(dtind);
+            df4_ddX     = m*l*cos_th*d*g0;
             
             df3_du      = mll*g0;
             df4_du      = -m*l*cos_th*g0;
             
             % get jacobians (hard coded for now)
             A = [ 
-              0,          1, 0,           0;
-              0,          0, 0,           1;
-              0, df3_dtheta, 0, df3_ddtheta;
-              0, df4_dtheta, 0, df4_ddtheta
+              0,          0,       1,           0;
+              0,          0,       0,           1;
+              0, df3_dtheta, df3_ddX, df3_ddtheta;
+              0, df4_dtheta, df4_ddX, df4_ddtheta
             ];
         
             B = [
