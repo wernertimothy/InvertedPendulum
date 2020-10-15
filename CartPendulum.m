@@ -130,7 +130,16 @@ classdef CartPendulum < handle
                 
         end % linearize
         
-        function visualize(obj)
+        function [Ak, Bk] = linearize_discrete(obj, xbar, ubar)
+            [A, B] = obj.linearize(xbar, ubar);
+%             tmp = expm([A, B; zeros(obj.p, obj.p+obj.n)]*obj.samplerate);
+%             Ak = tmp(1:obj.n, 1:obj.n);
+%             Bk = tmp(1:obj.n, obj.n+1:obj.n+obj.p);
+            Ak = expm(A*obj.samplerate);
+            Bk = B*obj.samplerate;
+        end % linearize discrete
+        
+        function visualize(obj, varargin)
             x           = obj.state;
             Xind        = obj.X_ind;
             tind        = obj.theta_ind;
@@ -152,8 +161,15 @@ classdef CartPendulum < handle
             rectangle('Position', [x(Xind) - car_width/2, 0, car_width, car_hight] ,'FaceColor', my_red);
             % plot rod
             x_rod = [ x(Xind)    , x(Xind) + obj.l*sin(x(tind))];
-            y_rod = [ car_hight/2, car_hight/2-obj.l*cos(x(tind))];
+            y_rod = [ car_hight/2, car_hight/2 - obj.l*cos(x(tind))];
             plot( x_rod, y_rod, 'k' ,'LineWidth',2);
+            % plot prediction
+            if ~isempty(varargin)
+                state_prediction = varargin{1};
+                x_pred = state_prediction(1,:) + obj.l*sin(state_prediction(2,:));
+                y_pred = car_hight/2 - obj.l*cos(state_prediction(2,:));
+                plot(x_pred, y_pred, 'b');
+            end
             % plot ball
             r = rectangle('Position', [ x_rod(2) - ball_radius, y_rod(2) - ball_radius, 2*ball_radius, 2*ball_radius]);
             r.Curvature = [1, 1];
