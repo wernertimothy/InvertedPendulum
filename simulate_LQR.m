@@ -29,8 +29,6 @@ time  = 0:sys.samplerate:sim_T;  % time steps
 
 sys.visualize()
 
-gif('doc/LQR.gif','DelayTime',sys.samplerate,'LoopCount',inf,'frame',gcf);
-
 % init loging arrays
 U = [];
 X = [];
@@ -44,6 +42,5 @@ for t = time
     % integrate and visualize
     sys.integrate(u);
     sys.visualize();
-    gif;
 end
 

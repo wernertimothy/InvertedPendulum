@@ -42,7 +42,6 @@ sim_T = 3;                                    % Simulation horizon
 time  = 0:sys.samplerate:sim_T;  % time steps
 
 sys.visualize()
-gif('doc/MPC.gif','DelayTime',sys.samplerate,'LoopCount',inf,'frame',gcf);
 
 % init empty QP (for qpOASES warmstart)
 QP = [];
@@ -78,5 +77,4 @@ for t = time
     % integrate and visualize
     sys.integrate(u);
     sys.visualize(x_star);
-    gif;
 end
