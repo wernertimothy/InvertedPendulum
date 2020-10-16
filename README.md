@@ -13,7 +13,11 @@ This will create two mex-files which will allow you to call the qpOASES solver.
 To see further information see the [Manual](https://www.coin-or.org/qpOASES/doc/3.0/manual.pdf).
 
 ## Simulation
-Currently running simulaitons are an LQR and a linear tracking MPC.
+Currently running simulaitons:
+*LQR
+<img src="https://github.com/wernertimothy/InvertedPendulum/blob/master/doc/LQR.gif" />
+*linear tracking MPC
+<img src="https://github.com/wernertimothy/InvertedPendulum/blob/master/doc/MPC.gif" />
 
 ## ToDo's
 * add noise and estimation
