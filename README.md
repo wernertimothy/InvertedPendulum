@@ -14,9 +14,9 @@ To see further information see the [Manual](https://www.coin-or.org/qpOASES/doc/
 
 ## Simulation
 Currently running simulaitons:
-*LQR
+* LQR
 <img src="https://github.com/wernertimothy/InvertedPendulum/blob/master/doc/LQR.gif" />
-*linear tracking MPC
+* linear tracking MPC
 <img src="https://github.com/wernertimothy/InvertedPendulum/blob/master/doc/MPC.gif" />
 
 ## ToDo's
