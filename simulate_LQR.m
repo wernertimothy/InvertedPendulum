@@ -25,9 +25,11 @@ xref = [1, pi, 0, 0]';
 
 % === Init Simulation ===
 sim_T = 3;                                    % Simulation horizon
-time  = sys.samplerate:sys.samplerate:sim_T;  % time steps
+time  = 0:sys.samplerate:sim_T;  % time steps
 
 sys.visualize()
+
+gif('doc/LQR.gif','DelayTime',sys.samplerate,'LoopCount',inf,'frame',gcf);
 
 % init loging arrays
 U = [];
@@ -42,4 +44,6 @@ for t = time
     % integrate and visualize
     sys.integrate(u);
     sys.visualize();
+    gif;
 end
+

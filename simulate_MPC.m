@@ -21,10 +21,10 @@ Q = diag([10, 1, 1, 1]);
 R = 0.1;
 [K, P, ~] = dlqr(A, B, Q, R);
 % set control parameter
-N    = 10;    % discrete horizon (Th = N*sys.samplerate)
+N    = 20;    % discrete horizon (Th = N*sys.samplerate)
 % upper and lower bound on input and states
-umin = -60 - ubar;                         % in local coordinates
-umax =  60 - ubar;                         % in local coordinates
+umin = -20 - ubar;                         % in local coordinates
+umax =  20 - ubar;                         % in local coordinates
 xmin = [-2, deg2rad(150), -3, -5]' - xbar; % in local coordinates
 xmax = [ 2, deg2rad(210),  3,  5]' - xbar; % in local coordinates
 
@@ -39,9 +39,10 @@ uref = 0;
 
 % === Init Simulation ===
 sim_T = 3;                                    % Simulation horizon
-time  = sys.samplerate:sys.samplerate:sim_T;  % time steps
+time  = 0:sys.samplerate:sim_T;  % time steps
 
 sys.visualize()
+gif('doc/MPC.gif','DelayTime',sys.samplerate,'LoopCount',inf,'frame',gcf);
 
 % init empty QP (for qpOASES warmstart)
 QP = [];
@@ -77,4 +78,5 @@ for t = time
     % integrate and visualize
     sys.integrate(u);
     sys.visualize(x_star);
+    gif;
 end
